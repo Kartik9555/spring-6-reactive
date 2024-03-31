@@ -1,12 +1,10 @@
 package com.example.practice.spring6reactive.controller;
 
-import com.example.practice.spring6reactive.domain.Beer;
 import com.example.practice.spring6reactive.dto.BeerDTO;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestClassOrder;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
