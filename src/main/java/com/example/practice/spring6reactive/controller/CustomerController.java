@@ -3,7 +3,9 @@ package com.example.practice.spring6reactive.controller;
 import com.example.practice.spring6reactive.dto.CustomerDTO;
 import com.example.practice.spring6reactive.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,11 +35,12 @@ public class CustomerController {
 
     @GetMapping(CUSTOMER_PATH_ID)
     public Mono<CustomerDTO> findById(@PathVariable("customerId") Integer customerId){
-        return customerService.findById(customerId);
+        return customerService.findById(customerId)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     @PostMapping(CUSTOMER_PATH)
-    public Mono<ResponseEntity<Void>> save(@RequestBody CustomerDTO customerDTO){
+    public Mono<ResponseEntity<Void>> save(@Validated @RequestBody CustomerDTO customerDTO){
         return customerService.save(customerDTO)
             .map(customer -> ResponseEntity.created(
                 UriComponentsBuilder.fromHttpUrl(BASE_PATH + CUSTOMER_PATH + "/" + customer.getId())
@@ -47,20 +51,24 @@ public class CustomerController {
     }
 
     @PutMapping(CUSTOMER_PATH_ID)
-    public Mono<ResponseEntity<Void>> update(@PathVariable("customerId") Integer customerId, @RequestBody CustomerDTO customerDTO){
+    public Mono<ResponseEntity<Void>> update(@PathVariable("customerId") Integer customerId, @Validated @RequestBody CustomerDTO customerDTO){
         return customerService.update(customerId, customerDTO)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(customer -> ResponseEntity.noContent().build());
     }
 
     @PatchMapping(CUSTOMER_PATH_ID)
-    public Mono<ResponseEntity<Void>> patch(@PathVariable("customerId") Integer customerId, @RequestBody CustomerDTO customerDTO){
+    public Mono<ResponseEntity<Void>> patch(@PathVariable("customerId") Integer customerId, @Validated @RequestBody CustomerDTO customerDTO){
         return customerService.patch(customerId, customerDTO)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(customer -> ResponseEntity.noContent().build());
     }
 
     @DeleteMapping(CUSTOMER_PATH_ID)
     public Mono<ResponseEntity<Void>> delete(@PathVariable("customerId") Integer customerId){
-        return customerService.deleteById(customerId)
+        return customerService.findById(customerId)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+            .map(customerDTO -> customerService.deleteById(customerDTO.getId()))
             .then(Mono.fromCallable(() -> ResponseEntity.noContent().build()));
     }
 }
