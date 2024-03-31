@@ -49,13 +49,13 @@ public class CustomerController {
     @PutMapping(CUSTOMER_PATH_ID)
     public Mono<ResponseEntity<Void>> update(@PathVariable("customerId") Integer customerId, @RequestBody CustomerDTO customerDTO){
         return customerService.update(customerId, customerDTO)
-            .map(customer -> ResponseEntity.ok().build());
+            .map(customer -> ResponseEntity.noContent().build());
     }
 
     @PatchMapping(CUSTOMER_PATH_ID)
     public Mono<ResponseEntity<Void>> patch(@PathVariable("customerId") Integer customerId, @RequestBody CustomerDTO customerDTO){
         return customerService.patch(customerId, customerDTO)
-            .map(customer -> ResponseEntity.ok().build());
+            .map(customer -> ResponseEntity.noContent().build());
     }
 
     @DeleteMapping(CUSTOMER_PATH_ID)

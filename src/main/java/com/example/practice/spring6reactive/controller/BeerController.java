@@ -52,13 +52,13 @@ public class BeerController {
     @PutMapping(BEER_PATH_ID)
     public Mono<ResponseEntity<Void>> updateBeer(@PathVariable("beerId") Integer beerId, @Validated @RequestBody BeerDTO beerDTO){
         return beerService.update(beerId, beerDTO)
-            .map(beer -> ResponseEntity.ok().build());
+            .map(beer -> ResponseEntity.noContent().build());
     }
 
     @PatchMapping(BEER_PATH_ID)
     public Mono<ResponseEntity<Void>> patchBeer(@PathVariable("beerId") Integer beerId, @Validated @RequestBody BeerDTO beerDTO){
         return beerService.patch(beerId, beerDTO)
-            .map(beer -> ResponseEntity.ok().build());
+            .map(beer -> ResponseEntity.noContent().build());
     }
 
     @DeleteMapping(BEER_PATH_ID)
