@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,8 +32,8 @@ public class BeerController {
 
 
     @GetMapping(BEER_PATH)
-    public Flux<BeerDTO> listBeer() {
-        return beerService.findAll();
+    public Flux<BeerDTO> listBeer(@RequestParam("beerStyle") String beerStyle) {
+        return beerService.findAll(beerStyle);
     }
 
     @GetMapping(BEER_PATH_ID)

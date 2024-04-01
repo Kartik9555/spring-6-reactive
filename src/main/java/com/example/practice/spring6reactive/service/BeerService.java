@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface BeerService {
-    Flux<BeerDTO> findAll();
+    Flux<BeerDTO> findAll(String beerStyle);
 
     Mono<BeerDTO> findById(Integer beerId);
 

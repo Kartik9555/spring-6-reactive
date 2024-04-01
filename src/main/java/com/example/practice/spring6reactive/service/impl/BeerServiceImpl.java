@@ -1,5 +1,6 @@
 package com.example.practice.spring6reactive.service.impl;
 
+import com.example.practice.spring6reactive.domain.Beer;
 import com.example.practice.spring6reactive.dto.BeerDTO;
 import com.example.practice.spring6reactive.mapper.BeerMapper;
 import com.example.practice.spring6reactive.repositories.BeerRepository;
@@ -18,8 +19,14 @@ public class BeerServiceImpl implements BeerService {
     private final BeerRepository beerRepository;
 
     @Override
-    public Flux<BeerDTO> findAll() {
-        return beerRepository.findAll().map(beerMapper::beerToBeerDTO);
+    public Flux<BeerDTO> findAll(String beerStyle) {
+        Flux<Beer> flux;
+        if(StringUtils.hasLength(beerStyle)){
+            flux = beerRepository.findByBeerStyle(beerStyle);
+        } else {
+            flux = beerRepository.findAll();
+        }
+        return flux.map(beerMapper::beerToBeerDTO);
     }
 
     @Override

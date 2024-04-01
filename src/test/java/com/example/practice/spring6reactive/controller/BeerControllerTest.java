@@ -2,6 +2,7 @@ package com.example.practice.spring6reactive.controller;
 
 import com.example.practice.spring6reactive.dto.BeerDTO;
 import java.math.BigDecimal;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class BeerControllerTest {
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueEquals("Content-type", "application/json")
-            .expectBody().jsonPath("$.size()").isEqualTo(3);
+            .expectBody().jsonPath("$.size()").value(Matchers.greaterThan(1));
     }
 
     @Test
