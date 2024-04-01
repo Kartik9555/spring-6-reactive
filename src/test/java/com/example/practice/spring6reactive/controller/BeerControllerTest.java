@@ -77,6 +77,16 @@ class BeerControllerTest {
     @Test
     @Order(40)
     void updateBeer() {
+        webTestClient.put().uri(BEER_PATH_ID, 1)
+            .body(Mono.just(getBeer()), BeerDTO.class)
+            .header("Content-type", "application/json")
+            .exchange()
+            .expectStatus().isNoContent();
+    }
+
+    @Test
+    @Order(44)
+    void updateBeerBadRequest() {
         BeerDTO beerDTO = getBeer();
         beerDTO.setBeerName("");
         webTestClient.put().uri(BEER_PATH_ID, 1)
@@ -84,16 +94,6 @@ class BeerControllerTest {
             .header("Content-type", "application/json")
             .exchange()
             .expectStatus().isBadRequest();
-    }
-
-    @Test
-    @Order(44)
-    void updateBeerBadRequest() {
-        webTestClient.put().uri(BEER_PATH_ID, 1)
-            .body(Mono.just(getBeer()), BeerDTO.class)
-            .header("Content-type", "application/json")
-            .exchange()
-            .expectStatus().isNoContent();
     }
 
     @Test
