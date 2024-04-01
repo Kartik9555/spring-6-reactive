@@ -63,7 +63,7 @@ class BeerControllerTest {
     }
 
     @Test
-    @Order(30)
+    @Order(35)
     void saveBeerBadRequest() {
         BeerDTO beerDTO = getBeer();
         beerDTO.setBeerName("");
