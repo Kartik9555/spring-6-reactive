@@ -32,7 +32,9 @@ public class BeerController {
 
 
     @GetMapping(BEER_PATH)
-    public Flux<BeerDTO> listBeer(@RequestParam("beerStyle") String beerStyle) {
+    public Flux<BeerDTO> listBeer(
+        @RequestParam(value = "beerStyle", required = false) String beerStyle
+    ) {
         return beerService.findAll(beerStyle);
     }
 
